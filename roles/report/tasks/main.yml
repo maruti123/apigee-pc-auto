@@ -1,0 +1,14 @@
+---
+- name: Component report
+  template:
+    src: ../templates/port_connectivity_report.csv.j2
+    dest: "{{ playbook_dir }}/reports/port_connectivity_report_{{ planet }}.csv"
+  vars:
+    r_nodes: "{{ groups['rmp'] | union(groups['r']) }}"
+    mp_nodes: "{{ groups['rmp'] | union(groups['mp']) }}"
+    ms_nodes: "{{ groups['msldap'] | union(groups['ms']) }}"
+
+- name: Compact report
+  template:
+    src: ../templates/port_compact.csv.j2
+    dest: "{{ playbook_dir }}/reports/port_compact_{{ planet }}.csv"

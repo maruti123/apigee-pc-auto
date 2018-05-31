@@ -1,0 +1,64 @@
+---
+# tasks file for port-connectivity-validator
+- name: Include qpid groups and ports
+  include_vars:
+    file: pg.yml
+
+# REGIONAL
+- name: PG -> DS port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: pg_ds_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups[node_region ~ '-ds'] }}"
+    - "{{ pg_groups['ds'] }}"
+
+# REGIONAL
+- name: PG -> MS port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: pg_ms_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups[node_region ~ '-ms'] + groups[node_region ~ '-msldap'] }}"
+    - "{{ pg_groups['ms'] }}"
+
+- name: PG -> PG port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: pg_pg_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups['pg'] }}"
+    - "{{ pg_groups['pg'] }}"
+
+- name: Set Fact DS port
+  set_fact:  
+    pg_ds_port: '{{ pg_ds_port_status.results }}'
+
+- name: Set Fact MS port
+  set_fact:  
+    pg_ms_port: '{{ pg_ms_port_status.results }}'
+
+- name: Set Fact PG port
+  set_fact:  
+    pg_pg_port: '{{ pg_pg_port_status.results }}'

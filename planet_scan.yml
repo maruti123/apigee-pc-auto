@@ -1,0 +1,10 @@
+---
+- hosts: planet
+  roles:    
+    - logs
+    - customer_config
+
+- hosts: localhost
+  roles:
+    - response_files
+    - planet_scan

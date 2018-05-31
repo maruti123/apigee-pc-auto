@@ -1,0 +1,30 @@
+---
+- name: Set tasks facts
+  set_fact:
+    response_path: "{{ playbook_dir }}/reports/{{ planet }}/response_files"    
+
+- name: Creates response dir if it doesn't exist
+  file:
+    path: "{{ response_path }}"
+    state: directory  
+
+- name: response template
+  delegate_to: localhost
+  vars:
+    region: "{{ item }}"
+    region_index: "{{ item[-1] }}"
+  template:
+    src: response.cfg.j2
+    dest: "{{ response_path }}/response_{{ planet }}_{{ item }}.cfg"
+  with_items:
+    - "{{ regions.split(',') }}"
+
+- name: Provision template
+  delegate_to: localhost
+  vars:
+    region: "{{ item }}"
+  template:
+    src: response_provision.cfg.j2
+    dest: "{{ response_path }}/response_{{ planet }}_{{ item }}_provision.cfg"
+  with_items:
+    - "{{ regions.split(',') }}"

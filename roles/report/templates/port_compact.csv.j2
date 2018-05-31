@@ -1,0 +1,11 @@
+HOST,TARGET,NODE,PORT,OPEN,DESCRIPTION
+{% for host in groups['planet'] %}
+{{ host }}
+{% for ps in cp_ports %}
+{% if hostvars[host][ps] is defined %}
+{% for item in hostvars[host][ps] %}
+{{ item.stdout }},{{ port_name_map["_" ~ item.stdout.split(',')[3]] }}
+{% endfor %}
+{% endif %}
+{% endfor %}  
+{% endfor %}

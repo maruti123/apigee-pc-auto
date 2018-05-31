@@ -1,0 +1,7 @@
+---
+- name: Generate template
+  delegate_to: localhost
+  template:
+   src: inventory.INI.j2
+   dest: "{{ playbook_dir }}/inventory/inventory_{{ json_schema.planet }}.INI"
+  

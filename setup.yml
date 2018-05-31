@@ -1,0 +1,110 @@
+--- 
+# Command in Zookeeper
+- hosts: zk
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: z
+    when: comp_task == 'all' or comp_task == 'zk'
+
+# Command in Cassandra
+- hosts: c
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: c
+    when: comp_task == 'all' or comp_task == 'cs'
+
+# Command in Zookeeper and Cassandra
+- hosts: ds
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ds
+    when: comp_task == 'all' or comp_task == 'ds'
+
+# Command in OpenLDAP
+- hosts: ldap
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ld
+    when: comp_task == 'all' or comp_task == 'ldap'
+
+# Command in Management Server
+- hosts: ms
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ms
+    when: comp_task == 'all' or comp_task == 'ms'
+
+# Command in Management Server and OpenLDAP
+- hosts: msldap
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ms
+    when: comp_task == 'all' or comp_task == 'msldap'
+
+# Command in Router
+- hosts: r
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: r
+    when: comp_task == 'all' or comp_task == 'r'
+
+# Command in Message Processor
+- hosts: mp
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: mp
+    when: comp_task == 'all' or comp_task == 'mp'
+
+# Command in Router and Message Processor
+- hosts: rmp
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: rmp
+    when: comp_task == 'all' or comp_task == 'rmp'
+
+# Command in QPIDD and Qpid Server
+- hosts: qpid
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: qs
+    when: comp_task == 'all' or comp_task == 'qs'
+
+# Command in Postgresql and Postgres Server
+- hosts: pg
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ps
+    when: comp_task == 'all' or comp_task == 'pg'

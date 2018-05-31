@@ -1,0 +1,9 @@
+{% for r in planet_mem %}
+{{ r['item'][0] ~ ": " ~ hostvars[r.item.0]['ansible_host'] }}
+{{ "Memory: " if r['cmd'][0].startswith("free") else "Disk usage:" }}
+{% for d in r['stdout_lines'] %}
+{{ d }}
+{% endfor %}
+
+
+{% endfor %}

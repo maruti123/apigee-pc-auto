@@ -1,0 +1,13 @@
+---
+- name: Create Virtual Host  
+  uri:
+    url: http://localhost:8080/v1/o/{{ org }}/environments/{{ env }}/virtualhosts/{{ vhost_name }}
+    method: POST
+    body: "{{ lookup('template', 'vhost_body.json.j2') }}"
+    body_format: json
+    force_basic_auth: yes
+    user: "{{ opdk_admin_email }}"
+    password: "{{ opdk_admin_password }}"
+    headers:
+      Content-Type: "application/json"
+    status_code: 200,201,409  

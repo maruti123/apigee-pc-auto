@@ -1,0 +1,56 @@
+---
+- name: Setup {{ profile }}
+  become: yes
+  command: bash /opt/apigee/apigee-setup/bin/setup.sh -p {{ profile }} -f /tmp/apigee/response_{{ planet }}_{{ hostvars[inventory_hostname]['region'] }}.cfg
+  async: 3600
+  poll: 5
+  when: cmd is defined and cmd == "setup"
+
+- name: Update block
+  block:
+
+  - name: Make unreachable R
+    become: yes
+    command: /opt/apigee/apigee-service/bin/apigee-service edge-router start
+    when: inventory_hostname in r_nodes and profile in ["r", "rmp"]
+
+  - name: Make unreachable MP
+    command: /opt/apigee/apigee-service/bin/apigee-service edge-message-processor stop
+    when: inventory_hostname in mp_nodes and profile in ["r", "rmp"]
+
+  - name: Update component
+    become: yes
+    command: bash /opt/apigee/apigee-setup/bin/update.sh -c {{ item }} -f /tmp/apigee/response_{{ planet }}_{{ hostvars[inventory_hostname]['region'] }}.cfg
+    async: 3600
+    poll: 5
+    with_items: 
+      - "{{ component_map[profile] }}"
+
+  - name: Make reachable R
+    become: yes
+    command: /opt/apigee/apigee-service/bin/apigee-service edge-router start
+    when: inventory_hostname in r_nodes and profile in ["r", "rmp"]
+
+  - name: Make reachable MP
+    command: /opt/apigee/apigee-service/bin/apigee-service edge-message-processor start
+    when: inventory_hostname in mp_nodes and profile in ["r", "rmp"]
+
+  when: cmd == "update"
+
+- name: Apigee-service block
+  block:
+
+  - name: Running apigee-service
+    become: yes
+    command: /opt/apigee/apigee-service/bin/apigee-service {{ item }} {{ cmd }}
+    register: status
+    async: 3600
+    poll: 5  
+    with_items: 
+      - "{{ service_map[profile] }}"
+
+  - debug: msg="{{ item.stdout_lines }}"  
+    with_items:
+      - "{{ status.results }}"
+
+  when: cmd is defined and cmd not in non_service_tasks

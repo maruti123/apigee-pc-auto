@@ -1,0 +1,15 @@
+adminapi_path: /opt/apigee/apigee-adminapi/bin/apigee-adminapi.sh 
+adminapi_defaults: --host localhost --admin {{ opdk_admin_email }} --pwd {{ opdk_admin_password }}
+adminapi_operations:
+  add:  
+    user: users add -u {{ user_email }} -p {{ user_password }} -n {{ user_name }} -l {{ user_lastname }}
+    userrole: orgs userroles users add -o {{ org}} -u {{ user_email }} -r {{ role }}
+  list:
+    orgs: orgs list -o {{ org }}
+    org_roles: orgs userroles list -o {{ org }}
+api_operations:
+  add:
+    role: o/{{ org }}/userroles
+    userroles: o/{{ org }}/users/userroles
+    resourcepermissions: o/{{ org }}/userroles/{{ role }}/resourcepermissions
+api_base_url: http://localhost:8080/v1

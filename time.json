@@ -1,0 +1,244 @@
+{
+  "environments" : [ {
+    "dimensions" : [ {
+      "metrics" : [ {
+        "name" : "sum(message_count)",
+        "values" : [ {
+          "timestamp" : 1526573940000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526574600000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526577240000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526577420000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526577600000,
+          "value" : "2.0"
+        }, {
+          "timestamp" : 1526578200000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526578500000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526579220000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526579460000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526579880000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526580300000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526580540000,
+          "value" : "2.0"
+        }, {
+          "timestamp" : 1526580840000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526581800000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526582100000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526582280000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526582340000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526583540000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526583960000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526584140000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526584260000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526584380000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526584980000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526585400000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526585640000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526586120000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526586240000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526587380000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526589120000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526590920000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526592300000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526592840000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526593440000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526593980000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526600040000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526601240000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526603820000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526604060000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526604720000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526604840000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526605800000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526605860000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526605920000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526605980000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526606100000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526606820000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526607180000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526608020000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526608920000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526610120000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526610480000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526610600000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526611260000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526612040000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526612520000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526613000000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526613180000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526614260000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526614380000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526614740000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526615100000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526615520000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526615640000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526618820000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526619840000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526655660000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526656080000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526656440000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526657160000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526659320000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526659680000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526661060000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526661300000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526662860000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526663700000,
+          "value" : "1.0"
+        }, {
+          "timestamp" : 1526663760000,
+          "value" : "1.0"
+        } ]
+      } ],
+      "name" : "200"
+    } ],
+    "name" : "prod"
+  } ],
+  "metaData" : {
+    "errors" : [ ],
+    "notices" : [ "query served by:051c53ba-99a9-49ab-8797-586f759e8038", "Source:Big Query", "Table used: uap-prod-gcp-us-east1-3.edge.edge_api_raxgroup026_fact" ]
+  }
+}

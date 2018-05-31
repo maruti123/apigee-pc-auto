@@ -1,0 +1,15 @@
+r_groups:
+  ds:
+    - "{{ zookeeper_ports['zk_data_port'] }}"
+    - "{{ cassandra_ports['cassandra_cql_native_port'] }}"
+    - "{{ cassandra_ports['cassandra_thrift_client_port'] }}"
+  ms: 
+    - "{{ ms_ext_mgmt_port }}"
+  r:
+    - "{{ router_int_mgmt_port }}"
+  mp:
+    - "{{ mp_int_mgmt_port }}"
+    - "{{ mp_router_port }}"
+    # - "{{ mp_ext_mgmt_port }}" Only when TSL b/w R and MP
+  qpid:
+    - "{{ qpid_messaging_port }}"

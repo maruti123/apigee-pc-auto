@@ -1,0 +1,8 @@
+---
+- hosts: planet
+  roles:
+     - port_checking
+
+- hosts: localhost
+  roles:
+     - report

@@ -1,0 +1,9 @@
+ZK RUOK
+{% for r in zk_ruoks %}
+{{ r.stdout }}
+{% endfor %}
+
+ZK STAT
+{% for s in zk_stats %}
+{{ s.stdout }}
+{% endfor %}

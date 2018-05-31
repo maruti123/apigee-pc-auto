@@ -1,0 +1,62 @@
+---
+- name: Set tar file name
+  set_fact:
+    tar_name: log_{{ inventory_hostname }}.tar.gz
+
+
+- name: Find download log
+  find:
+    path: /opt/apigee/var/log/edge-message-processor/logs
+    hidden: yes
+    recurse: yes
+    age: -2d
+  register: downloads
+
+- debug:
+    var: downloads
+
+- name: copy multiple files with_items
+  copy:
+    src: "{{item.path}}"
+    dest: /tmp
+    remote_src: true
+    mode: 0774
+  with_items:
+    - "{{ downloads.files }}"
+
+
+
+- name: Execute the command in remote shell
+  shell: tar -zcvf transfer.tar.gz system*log* --remove-files
+  args:
+    executable: /bin/bash
+    chdir: /tmp
+  
+# - name: Archive node logs
+#   archive:
+#     path: "{{item}}"
+#     dest: /tmp/log.tar.gz
+#     format: gz
+#   become: yes
+#   #with_subelements: 
+#   #- "{{ downloads.files }}"
+#   with_items:: 
+#    - "{{ downloads.files.path }}"
+
+
+
+- name: Fetch logs
+  fetch:
+    flat: yes
+    src: /tmp/transfer.tar.gz
+    dest: reports/{{ planet }}/{{ inventory_hostname }}/{{ tar_name }}
+
+- name: Remove tar 
+  file:
+    state: absent
+    path: "{{ item }}"
+  become: yes
+  with_items:
+    - /tmp/transfer.tar.gz
+  
+  

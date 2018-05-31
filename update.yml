@@ -1,0 +1,146 @@
+--- 
+# Upload response filesupdate
+- hosts: localhost
+  tasks:
+  - include_role: 
+      name: response_files
+
+# Run prereq stepsupdate
+- hosts: planet
+  tasks:
+  - include_role:
+      name: prereq    
+
+# Third party components
+
+# Update Zookeeper
+- hosts: zk
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: z
+      cmd: update     
+
+# Update Cassandra
+- hosts: c
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: c
+      cmd: update
+
+# Update Zookeeper and Cassandra
+- hosts: ds
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ds
+      cmd: update
+
+# Update QPIDD
+- hosts: qpid
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: qs
+      cmd: update
+
+# Update Postgresql
+- hosts: pg
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ps
+      cmd: update
+
+# Update OpenLDAP
+- hosts: ldap:msldap
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: ld
+      cmd: update
+
+## Edge components    
+
+# Update Qpid Server
+- hosts: qpid
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: edge
+      cmd: update
+
+# Update Postgres Server
+- hosts: pg
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: edge
+      cmd: update      
+
+# Update Management Server
+- hosts: ms:msldap
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: edge
+      cmd: update          
+
+# Update Message Processor
+- hosts: mp
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: edge
+      cmd: update  
+
+# Update Router and Message Processor
+- hosts: rmp
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: edge
+      cmd: update 
+
+# Update Router
+- hosts: r
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: edge
+      cmd: update    
+
+# Update UI
+- hosts: ui
+  serial: 1
+  tasks:
+  - include_role:
+      name: setup
+    vars: 
+      profile: edge
+      cmd: update      

@@ -1,0 +1,102 @@
+---
+# tasks file for port-connectivity-validator
+- name: Include ms groups and ports
+  include_vars:
+    file: ms.yml
+
+- name: MS -> DS port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: ms_ds_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups['ds'] }}"
+    - "{{ ms_groups['ds'] }}"
+
+# REGIONAL
+- name: MS -> R port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: ms_r_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups[node_region ~ '-r'] +  groups[node_region ~ '-rmp'] }}"
+    - "{{ ms_groups['r'] }}"
+ 
+- name: MS -> MP port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: ms_mp_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ mp_nodes }}"
+    - "{{ ms_groups['mp'] }}"
+
+- name: MS -> PG port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: ms_pg_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups['pg'] }}"
+    - "{{ ms_groups['pg'] }}"
+
+#REGIONAL
+- name: MS -> QPIDD port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: ms_qpid_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups[node_region ~ '-qpid'] }}"
+    - "{{ ms_groups['qpid'] }}"
+
+- name: Set Fact DS port
+  set_fact:  
+    ms_ds_port: '{{ ms_ds_port_status.results }}'
+
+- name: Set Fact R port
+  set_fact:  
+    ms_r_port: '{{ ms_r_port_status.results }}'
+
+- name: Set Fact MP port
+  set_fact:  
+    ms_mp_port: '{{ ms_mp_port_status.results }}'
+
+- name: Set Fact PG port
+  set_fact:  
+    ms_pg_port: '{{ ms_pg_port_status.results }}'
+
+- name: Set Fact QPIDD port
+  set_fact:  
+    ms_qpid_port: '{{ ms_qpid_port_status.results }}'

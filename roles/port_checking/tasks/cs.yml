@@ -1,0 +1,19 @@
+---
+- name: CS -> CS port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  cassandra_ports[item.1] }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ $PASS -eq {{ cassandra_ports[item.1] }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ cassandra_ports[item.1] }},$RESULT" 
+  register: 'cs_port_status'
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups['ds'] | difference([inventory_hostname]) }}"
+    - "{{ cassandra_ports | difference('cassandra_jmx_port') }}"
+
+- name: Set Fact Thrift port
+  set_fact:  
+    cs_port: '{{ cs_port_status.results }}'

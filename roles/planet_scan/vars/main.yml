@@ -1,0 +1,20 @@
+mgmt_cs: 
+  - ms
+  - msldap
+  - r  
+  - mp
+  - qpid
+  - pg
+
+rmp_cs: 
+  - r
+  - mp
+  
+mgmt_ports:
+  ms: 8080
+  msldap: 8080
+  r: 8081  
+  mp: 8082
+  qpid: 8083
+  pg: 8084 
+

@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  roles:
+    - response_files    
+
+- hosts: planet
+  roles:
+    - prereq
+    - systemlimits

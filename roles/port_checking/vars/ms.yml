@@ -1,0 +1,20 @@
+---
+ms_groups:
+  ds:
+    - "{{ cassandra_ports['cassandra_jmx_port'] }}"  
+    - "{{ cassandra_ports['cassandra_cql_native_port'] }}"  
+    - "{{ cassandra_ports['cassandra_thrift_client_port'] }}"  
+    - "{{ zookeeper_ports['zk_data_port'] }}"
+  r:
+    - "{{ router_int_mgmt_port }}"  
+    - "{{ router_ext_mgmt_port }}"  
+  mp:
+    - "{{ mp_int_mgmt_port }}"  
+    - "{{ mp_ext_mgmt_port }}" 
+  pg: 
+    - "{{ pg_int_mgmt_port }}"  
+    - "{{ pg_ext_mgmt_port }}"  
+    - "{{ pg_db_port }}"  
+  qpid:
+    - "{{ qpid_int_mgmt_port }}"  
+    - "{{ qpid_ext_mgmt_port }}"  

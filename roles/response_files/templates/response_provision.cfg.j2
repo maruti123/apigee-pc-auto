@@ -1,0 +1,36 @@
+#############################################################################
+# @region   : {{ region.upper() }}
+# @date     : {{ ansible_date_time['iso8601_micro'] }}
+# @author   : {{ ansible_user_id }}
+# @inventory: {{ inventory_file }}
+#############################################################################
+{% for host in groups["planet"] %}
+{{ hostvars[host]['env_ref'] }}="{{ hostvars[host]['ansible_host'] }}"
+{% endfor %}
+
+{%if groups[region ~ "-msldap"].0 is defined %}
+{% set mschild = "-msldap" %}
+{% else %}
+{% set mschild = "-ms" %}
+{% endif %}
+
+HOSTIP="$(hostname -i)"
+MSIP="${{ hostvars[groups[region ~ mschild].0].env_ref }}"
+ADMIN_EMAIL="{{ opdk_admin_email }}"
+APIGEE_ADMINPW="{{ opdk_admin_password }}"
+
+ORG_NAME="{{ onboard_org_name }}"
+
+NEW_USER="y"
+USER_NAME="{{ onboard_admin_username }}"
+FIRST_NAME="{{ onboard_admin_name }}"
+LAST_NAME="{{ onboard_admin_lastname }}"
+USER_PWD="{{ onboard_admin_pwd }}"
+ORG_ADMIN="{{ onboard_admin_username }}"
+
+ENV_NAME="{{ onboard_env }}"
+
+VHOST_PORT="9001"
+VHOST_NAME="default"
+
+VHOST_ALIAS="{{ onboard_vhost_alias }}"

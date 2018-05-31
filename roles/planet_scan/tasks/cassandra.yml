@@ -1,0 +1,22 @@
+---
+- name: Cassandra statusthrift
+  shell: |
+    ST=`/opt/apigee/apigee-cassandra/bin/nodetool -h localhost statusthrift`;
+    echo {{ hostvars[item]['ansible_host'] }},{{ item }},$ST;
+  delegate_to: "{{ item }}"
+  register: cs_statusthrift_res
+  with_items: 
+      - "{{ cs_hosts }}"
+
+- name: Cassandra ring block
+  block:
+  
+  - name: Cassandra ring
+    command: /opt/apigee/apigee-cassandra/bin/nodetool -h localhost ring
+    register: cs_ring_res
+
+  - name: Cassandra status
+    command: /opt/apigee/apigee-cassandra/bin/nodetool -h localhost status
+    register: cs_status_res
+  
+  delegate_to: "{{ (groups['c'] | union(groups['ds']))[0] }}"

@@ -1,0 +1,36 @@
+---
+- name: Self block
+  block:
+
+    - name: Get not rmp self status    
+      uri:
+        url: http://{{ hostvars[item.0]['ansible_host'] }}:{{ mgmt_ports[item.1] }}/v1/servers/self
+        user: "{{ opdk_admin_email }}"
+        password: "{{ opdk_admin_password }}"
+        force_basic_auth: yes
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+        return_content: yes
+      register: self_res
+      when: item[0] in groups[item.1]
+      with_nested:
+        - "{{ groups['planet'] }}"
+        - "{{ mgmt_cs }}"
+
+    - name: Get rmp self status
+      uri:
+        url: http://{{ hostvars[item.0]['ansible_host'] }}:{{ mgmt_ports[item.1] }}/v1/servers/self
+        user: "{{ opdk_admin_email }}"
+        password: "{{ opdk_admin_password }}"
+        force_basic_auth: yes
+        headers:
+          Content-Type: "application/json"
+        status_code: 200
+        return_content: yes
+      register: self_rmp_res  
+      with_nested:
+        - "{{ groups['rmp'] }}"
+        - "{{ rmp_cs }}"
+
+  delegate_to: "{{ (groups['ms'] | union(groups['msldap']))[0] }}"

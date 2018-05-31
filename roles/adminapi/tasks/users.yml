@@ -1,0 +1,8 @@
+---
+- name: Create user
+  command: "{{ adminapi_path }} {{ adminapi_operations['add']['user'] }} {{ adminapi_defaults }}"
+
+- name: Add user to role
+  command: "{{ adminapi_path }} {{ adminapi_operations['add']['userrole'] }} {{ adminapi_defaults }}"
+
+

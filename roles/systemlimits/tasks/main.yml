@@ -1,0 +1,24 @@
+---
+- name: Build CS/MP list
+  set_fact:
+    cs_mp_list: "{{ groups['ds'] | union(groups['mp']) }}"
+
+- name: System limits for CS and MP
+  become: yes
+  template:
+    src: limits.conf.j2
+    dest: /etc/security/limits.d/90-apigee-edge-limits.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: inventory_hostname in cs_mp_list
+
+- name: Postgresql mem settings
+  become: yes
+  template:
+    src: pg.properties.j2
+    dest: /opt/apigee/customer/application/postgresql.properties
+    owner: root
+    group: root
+    mode: 0644
+  when: inventory_hostname in groups['pg']

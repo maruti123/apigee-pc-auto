@@ -1,0 +1,64 @@
+---
+# tasks file for port-connectivity-validator
+- name: Include qpid groups and ports
+  include_vars:
+    file: qpid.yml
+
+# REGIONAL
+- name: QPIDD -> DS port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: qpid_ds_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups[node_region ~ '-ds'] }}"
+    - "{{ qpid_groups['ds'] }}"
+
+# REGIONAL
+- name: QPIDD -> MS port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: qpid_ms_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups[node_region ~ '-ms'] + groups[node_region ~ '-msldap'] }}"
+    - "{{ qpid_groups['ms'] }}"
+
+- name: QPIDD -> PG port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: qpid_pg_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups['pg'] }}"
+    - "{{ qpid_groups['pg'] }}"
+
+- name: Set Fact DS port
+  set_fact:  
+    qpid_ds_port: '{{ qpid_ds_port_status.results }}'
+
+- name: Set Fact MS port
+  set_fact:  
+    qpid_ms_port: '{{ qpid_ms_port_status.results }}'
+
+- name: Set Fact PG port
+  set_fact:  
+    qpid_pg_port: '{{ qpid_pg_port_status.results }}'

@@ -1,0 +1,171 @@
+HOST,TARGET,NODE,PORT,OPEN
+CASSANDRA,,,,
+{% for host in groups['ds'] %}
+{{ host }},,,,
+{% for item in hostvars[host].cs_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+ZOOKEEPER,,,,
+{% for host in groups['ds'] %}
+{{ host }},,,,
+{% for item in hostvars[host].zk_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+MANAGEMENT SERVER,,,,
+# DS,,,,
+{% for host in ms_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].ms_ds_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# R,,,,
+{% for host in ms_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].ms_r_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# MP,,,,
+{% for host in ms_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].ms_mp_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# PG,,,,
+{% for host in ms_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].ms_pg_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# QPIDD,,,,
+{% for host in ms_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].ms_qpid_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+MESSAGE PROCESSOR,,,,
+# DS,,,,
+{% for host in mp_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].mp_ds_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# MS,,,,
+{% for host in mp_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].mp_ms_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# MP,,,,
+{% for host in mp_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].mp_mp_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# QPIDD,,,,
+{% for host in mp_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].mp_qpid_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+ROUTER,,,,
+# DS,,,,
+{% for host in r_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].r_ds_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# MS,,,,
+{% for host in r_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].r_ms_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# R,,,,
+{% for host in r_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].r_r_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# MP,,,,
+{% for host in r_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].r_mp_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# QPIDD,,,,
+{% for host in r_nodes %}
+{{ host }},,,,
+{% for item in hostvars[host].r_qpid_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+
+QPIDD,,,,
+# DS,,,,
+{% for host in groups['qpid'] %}
+{{ host }},,,,
+{% for item in hostvars[host].qpid_ds_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# MS,,,,
+{% for host in groups['qpid'] %}
+{{ host }},,,,
+{% for item in hostvars[host].qpid_ms_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# PG,,,,
+{% for host in groups['qpid'] %}
+{{ host }},,,,
+{% for item in hostvars[host].qpid_pg_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+
+PG,,,,
+# DS,,,,
+{% for host in groups['pg'] %}
+{{ host }},,,,
+{% for item in hostvars[host].pg_ds_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# MS,,,,
+{% for host in groups['pg'] %}
+{{ host }},,,,
+{% for item in hostvars[host].pg_ms_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+# PG,,,,
+{% for host in groups['pg'] %}
+{{ host }},,,,
+{% for item in hostvars[host].pg_pg_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}
+
+UI,,,,
+# MS,,,,
+{% for host in groups['ui'] %}
+{{ host }},,,,
+{% for item in hostvars[host].ui_ms_port %}
+{{ item.stdout }}
+{% endfor %}  
+{% endfor %}

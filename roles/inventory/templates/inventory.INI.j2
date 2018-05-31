@@ -1,0 +1,233 @@
+# Planet {{ json_schema.planet }}
+{% set servers={} %}
+{% set regions=[] %}
+{% set ips=[] %}
+{% set ldap_count=[0] %}
+localhost ansible_connection=local
+
+[planet]
+{% for region in json_schema.regions %}
+{% set x=regions.append({"name": region.name, "nodes": []}) %}
+{% set region_index=loop.index - 1 %}
+# {{ region.name }}
+{% set node_count = [1] %}
+{% for sn in region.subnets %}
+{% for n in sn.nodes %}
+{% if n.ip not in ips %}
+{% set node_name=region.name ~ '-n' ~ node_count.0 %}
+{{ node_name }} ansible_host={{ n.ip }} env_ref={{ node_name.upper() | replace('-','') }} region={{ region.name }}
+{% for sc in regions if sc.name==region.name %}
+{% set x=sc.nodes.append({"name": node_name, "ip": n.ip, "components": []}) %}
+{% endfor %}
+{% set x=ips.append(n.ip) %}
+{% set x=node_count.append(node_count.pop() + 1) %}
+{% endif %}
+{% for c in n.components %}
+{% for node in regions[region_index].nodes if node.ip==n.ip and c.comp not in n.components %}
+{% set x=node.components.append(c.comp) %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% set x=servers.__setitem__("regions", regions) %}
+
+{% for r in servers.regions %}
+{% set iteratee=servers.regions[loop.index - 1].nodes %}
+[{{ r.name }}]
+# Listing of all nodes in {{ r.name }}
+{% for n in iteratee %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-ds]
+# Listing of all the Cassandra and Zookeeper nodes in {{ r.name }}
+{% for n in iteratee if "CS" in n.components and "ZK" in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-c]
+# Listing of all the isolated Cassandra nodes in {{ r.name }}
+{% for n in iteratee if "CS" in n.components and "ZK" not in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-zk]
+# Listing of all the isolated Zookeeper nodes in {{ r.name }}
+{% for n in iteratee if "CS" not in n.components and "ZK" in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-msldap]
+# Listing of all the Management Server and OpenLDAP nodes in {{ r.name }}
+{% for n in iteratee if "MS" in n.components and "OL" in n.components %}
+{{ n.name }}
+{% set x=ldap_count.append(ldap_count.pop() + 1) %}{% endfor %}
+
+[{{ r.name }}-ms]
+# Listing of all the isolated Management Server nodes in {{ r.name }}
+{% for n in iteratee if "MS" in n.components and "OL" not in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-ldap]
+# Listing of all the isolated OpenLDAP nodes in {{ r.name }}
+{% for n in iteratee if "MS" not in n.components and "OL" in n.components %}
+{{ n.name }}
+{% set x=ldap_count.append(ldap_count.pop() + 1) %}
+{% endfor %}
+
+[{{ r.name }}-rmp]
+# Listing of all the Router and Message Processor nodes in {{ r.name }}
+{% for n in iteratee if "R" in n.components and "MP" in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-r]
+# Listing of all the isolated Router nodes in {{ r.name }}
+{% for n in iteratee if "R" in n.components and "MP" not in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-mp]
+# Listing of all the isaolated Message Processor nodes in {{ r.name }}
+{% for n in iteratee if "R" not in n.components and "R" in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-qpid]
+# Listing of all the Qpid nodes in {{ r.name }}
+{% for n in iteratee if "QS" in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-pg]
+# Listing of all the Postgres nodes in {{ r.name }}
+{% for n in iteratee if "PS" in n.components %}
+{{ n.name }}
+{% endfor %}
+
+[{{ r.name }}-pgmaster]
+# Listing of all the Postgres master nodes in {{ r.name }}
+{% for n in iteratee if "PGm" in n.components %}
+{{ n.name }} pg_conf=master
+{% endfor %}
+
+[{{ r.name }}-pgstandby]
+# Listing of all the Postgres standby nodes in {{ r.name }}
+{% for n in iteratee if "PGs" in n.components %}
+{{ n.name }} pg_conf=standby
+{% endfor %}
+
+[{{ r.name }}-ui]
+# Listing of all the UI nodes in {{ r.name }}
+{% for n in iteratee if "UI" in n.components %}
+{{ n.name }}
+{% endfor %}
+
+{% endfor %}
+
+[ds:children]
+# Listing of all the Cassandra and Zookeeper nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-ds
+{% endfor %}
+
+[c:children]
+# Listing of all the isolated Cassandra nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-c
+{% endfor %}
+
+[zk:children]
+# Listing of all the isolated Zookeeper nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-zk
+{% endfor %}
+
+[msldap:children]
+# Listing of all the Management Server nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-msldap
+{% endfor %}
+
+[ldap:children]
+# Listing of all the isolated Management Server nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-ldap
+{% endfor %}
+
+[ms:children]
+# Listing of all the isolated Management Server nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-ms
+{% endfor %}
+
+[r:children]
+# Listing of all the Router nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-r
+{% endfor %}
+
+[mp:children]
+# Listing of all the Message Processor nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-mp
+{% endfor %}
+
+[rmp:children]
+# Listing of all the Message Processor nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-rmp
+{% endfor %}
+
+[qpid:children]
+# Listing of all the QPIDD nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-qpid
+{% endfor %}
+
+[pg:children]
+# Listing of all the Postgres nodes across the planet
+{% for r in servers.regions %}
+{% for p in r.nodes if 'PGm' in p.components %}
+{{ r.name }}-pgmaster
+{% endfor %}
+{% for p in r.nodes if 'PGs' in p.components %}
+{{ r.name }}-pgstandby
+{% endfor %}
+{% for p in r.nodes if 'PG' in p.components %}
+{{ r.name }}-pg
+{% endfor %}
+{% endfor %}
+
+[ui:children]
+# Listing of all the UI nodes across the planet
+{% for r in servers.regions %}
+{{ r.name }}-ui
+{% endfor %}
+
+[all:vars]
+planet="{{ json_schema.planet }}"
+regions={{ regions | map(attribute='name') | join(',') }}
+{% if ldap_count.0>1 %}
+opdk_ldap_type="2"
+{% else %}
+opdk_ldap_type="1"
+{%endif%}
+{%- raw %}
+ansible_user="{{ ssh_user }}"
+ansible_ssh_private_key_file="{{ ssh_key }}"
+{% endraw %}
+{% if json_schema.ssh.ssh_password %}
+{%- raw %}
+ansible_ssh_pass="{{ ssh_pwd }}"
+{% endraw %}
+{% endif %}
+{% if json_schema.ssh.bastion.present %}
+{% raw %}
+ansible_ssh_common_args='-o ProxyCommand="ssh -i {{ bastion_private_key_file }} -W %h:%p -q {{ bastion_user }}@{{ bastion_host }}"'
+{% endraw %}
+{% endif %}
+
+[defaults]

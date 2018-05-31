@@ -1,0 +1,83 @@
+#############################################################################
+# @region   : {{ region.upper() }}
+# @date     : {{ ansible_date_time['iso8601_micro'] }}
+# @author   : {{ ansible_user_id }}
+# @inventory: {{ inventory_file }}
+#############################################################################
+{% for host in groups["planet"] %}
+{{ hostvars[host]['env_ref'] }}="{{ hostvars[host]['ansible_host'] }}"
+{% endfor %}
+{%if groups[region ~ "-msldap"].0 is defined %}
+{% set mschild = "-msldap" %}
+{% set ldapchild = "-msldap" %}
+{% else %}
+{% set mschild = "-ms" %}
+{% set ldapchild = "-ldap" %}
+{% endif %}
+
+HOSTIP="$(hostname -i)"
+MSIP="${{ hostvars[groups[region ~ mschild].0].env_ref }}"
+ADMIN_EMAIL="{{ opdk_admin_email }}"
+APIGEE_ADMINPW="{{ opdk_admin_password }}"
+LICENSE_FILE="{{ opdk_license_target_file_path }}"
+
+{% set regions_list=regions.split(',') %}
+USE_LDAP_REMOTE_HOST="{{ opdk_use_ldap_remote_host }}"
+LDAP_TYPE="{{ opdk_ldap_type }}"
+APIGEE_LDAPPW="{{ opdk_admin_password }}"
+{% if opdk_ldap_type == '2' %}
+{# Set peer to the next/first region #}
+{% set region_succ=region|replace(region_index, region_index|int + 1) %}
+{% if region_succ in regions_list %}
+{% set ldap_peer=hostvars[groups[region_succ ~ ldapchild].0].env_ref %}
+{% else %}
+{% set ldap_peer=hostvars[groups[regions_list.0[:-1] ~ "1" ~ ldapchild].0].env_ref %}
+{% endif %}
+LDAP_SID="{{ region_index }}"
+LDAP_PEER="${{ ldap_peer }}"
+{% endif %}
+
+ENABLE_AX="{{ opdk_enable_ax }}"
+MP_POD="gateway-{{ region_index }}"
+
+REGION="{{ region }}"
+
+{# If even ZKs then last ZK is an observer #}
+{% set zkobs=False %}
+{% if not (groups["ds"] | length  % 2) %}
+{% set zkobs=True %}
+{% endif %}
+ZK_CLIENT_HOSTS="{% for zk in groups[region ~ "-ds"] %}${{ hostvars[zk].env_ref }}{% if not loop.last %} {% endif %}{% endfor %}"
+ZK_HOSTS="{% for zk in groups["ds"] %}${{ hostvars[zk].env_ref }}{% if not loop.last %} {% elif zkobs%}:observer{% endif %}{% endfor %}"
+
+{# Move current CS region to the head #}
+{% set oldindex=regions_list.index(region) %}
+{% set x=regions_list.insert(0, regions_list.pop(oldindex)) %}
+CASS_HOSTS="{% for r in regions_list %}{% for cs in  groups[r ~ '-ds'] %}${{ hostvars[cs].env_ref }}:{{ r[-1] }},1{% if not loop.last %} {% endif %}{% endfor %}{% if not loop.last %} {% endif %}{% endfor %}"
+CASS_USERNAME="{{ opdk_cass_username }}"
+CASS_PASSWORD="{{ opdk_cass_password }}"
+CASS_AUTH="{{ opdk_cass_auth }}"
+
+{% for host in groups['pg'] %}
+{% if hostvars[host]['pg_conf'] is defined %}
+{% if hostvars[host]['pg_conf'] =='master' %}
+PG_MASTER="${{ hostvars[host]['env_ref'] }}"
+{% else %}
+PG_STANDBY="${{ hostvars[host]['env_ref'] }}"
+{% endif %}
+{% endif %}
+{% endfor %}
+PG_PWD="{{ opdk_postgres_password }}"
+
+SMTPMAILFROM="{{ opdk_smtp_mail_from }} <{{  opdk_smtp_user }}>"
+SKIP_SMTP="{{ opdk_smtp_skip }}"
+{% if opdk_smtp_skip | trim == 'n' %}
+SMTPHOST="{{ opdk_smtp_host }}"
+SMTPPORT="{{ opdk_smtp_port }}"
+SMTPUSER="{{ opdk_smtp_user }}"
+SMTPPASSWORD="{{ opdk_smtp_password }}"
+SMTPSSL="{{ opdk_smtp_ssl }}"
+{% endif %}
+BIND_ON_ALL_INTERFACES="{{ opdk_bind_on_all_interfaces }}"
+
+ENABLE_SYSTEM_CHECK="{{ enable_system_check }}"

@@ -1,0 +1,16 @@
+{ 
+  "name": "{{ vhost_name }}", 
+  "hostAliases": [ {% for h in vhost_aliases.split(',') %}"{{ h }}"{% if not loop.last %}, {% endif %}{% endfor %} ], 
+  {% if tls_enabled is defined %}
+  "port": "9443",   
+  "sSLInfo": { 
+    "enabled": "true", 
+    "clientAuthEnabled": "false", 
+    "keyStore": "{{ keystore }}", 
+    "keyAlias": "{{ keyalias }}" 
+  },
+  {% else %}
+  "port": "9001", 
+  {% endif %}
+  "interfaces" : [ ]
+}

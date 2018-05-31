@@ -1,0 +1,18 @@
+---
+- name: Verify node version
+  command: node --version
+  register: node_version  
+
+- name: Verify etp version
+  command: etp --version
+  register: etp_version 
+
+- name: 
+  set_fact:
+    diagram_name: "{{ (topology_src | splitext)[0].split('/')[-1] }}"
+
+- name: Generate diagram
+  command: etp generate diagram {{ playbook_dir }}/{{ topology_src }} {{ diagram_name }}.svg
+  args:
+    chdir: "{{ playbook_dir }}/reports/"
+

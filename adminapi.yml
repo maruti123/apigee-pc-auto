@@ -1,0 +1,4 @@
+---
+- hosts: ms[0]:msldap[0]
+  roles:
+    - adminapi

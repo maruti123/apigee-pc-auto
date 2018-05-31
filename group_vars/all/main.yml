@@ -1,0 +1,21 @@
+opdk_user_name: apigee
+opdk_group_name: apigee
+opdk_installer_path: /opt/apigee
+opdk_license_target_file_path: "{{ license_target_path | default('/tmp/apigee/license.txt') }}"
+opdk_use_ldap_remote_host: "{{ use_ldap_remote_host | default('n') }}"
+opdk_enable_ax: "{{ enable_ax | default('y') }}"
+opdk_cass_username: "{{ cass_username | default('cassandra') }}"
+opdk_cass_password: "{{ cass_password | default('cassandra') }}"
+opdk_cass_auth: "{{ cass_auth | default('n') }}"
+opdk_postgres_password: "{{ postgres_password | default('postgres') }}"
+opdk_bind_on_all_interfaces: "{{ bind_on_all_interfaces | default('y') }}"
+enable_system_check: "{{ system_check | default('n') }}"
+ansible_user: "{{ ssh_user | default('user') }}"
+ansible_ssh_pass: "{{ ssh_pwd | default('Apigee123!') }}"
+ansible_ssh_private_key_file: "{{ ssh_key | default('key') }}"
+bastion_user: "{{ ssh_bastion_user | default('user') }}"
+bastion_private_key_file: "{{ ssh_bastion_key | default(ansible_ssh_private_key_file) }}"
+bastion_host: "{{ ssh_bastion_host | default('None') }}"
+comp_task: "{{ component | default('all') }}"
+r_nodes: "{{ groups['rmp'] | union(groups['r']) }}"
+mp_nodes: "{{ groups['rmp'] | union(groups['mp']) }}"

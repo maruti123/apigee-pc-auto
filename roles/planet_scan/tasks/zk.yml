@@ -1,0 +1,25 @@
+---
+- name: Zk Block
+  block:
+
+  - name: ZK ruok
+    shell: |
+      RUOK=`echo ruok | nc {{ hostvars[item]['ansible_host'] }} 2181`;
+      echo  {{ hostvars[item]['ansible_host'] }},{{ item }},$RUOK;
+    register: zk_ruok_res
+    with_items: 
+      - "{{ zk_hosts }}"
+  
+  - name: ZK stat    
+    shell: |
+      STAT=`echo stat | nc {{ hostvars[item]['ansible_host'] }} 2181 | grep Mode`;
+      echo {{ hostvars[item]['ansible_host'] }},{{ item }},$STAT;
+    register: zk_stat_res
+    with_items: 
+      - "{{ zk_hosts }}"
+
+  - name: ZK tree
+    command: /opt/apigee/apigee-zookeeper/contrib/zk-tree.sh 
+    register: zk_tree_res
+  
+  delegate_to: "{{ (groups['zk'] | union(groups['ds']))[0] }}"

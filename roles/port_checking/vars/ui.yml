@@ -1,0 +1,3 @@
+ui_groups:
+  ms: 
+    - "{{ ms_ext_mgmt_port }}"

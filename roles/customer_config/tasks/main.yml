@@ -1,0 +1,23 @@
+---
+- name: Set tar file name
+  set_fact:
+    tar_name: customer_{{ inventory_hostname }}.tar.gz
+
+- name: Archive node customer/application
+  archive:
+    path: /opt/apigee/customer/application
+    dest: /tmp/customer.tar.gz
+    format: gz
+  become: yes
+
+- name: Fetch customer/application  
+  fetch:
+    flat: yes
+    src: /tmp/customer.tar.gz
+    dest: reports/{{ planet }}/{{ inventory_hostname }}/{{ tar_name }}
+
+- name: Remove tar
+  file:
+    state: absent
+    path: /tmp/customer.tar.gz
+  become: yes

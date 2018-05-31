@@ -1,0 +1,32 @@
+---  
+# Region condition
+- name: Set region flag
+  set_fact:
+    node_region: "{{ hostvars[inventory_hostname]['region'] }}"
+    r_nodes: "{{ groups['rmp'] | union(groups['r']) }}"
+    mp_nodes: "{{ groups['rmp'] | union(groups['mp']) }}"
+    ms_nodes: "{{ groups['ms'] | union(groups['msldap']) }}"
+
+- include_tasks: zk.yml
+  when: inventory_hostname in groups['ds']
+
+- include_tasks: cs.yml
+  when: inventory_hostname in groups['ds']
+
+- include_tasks: ms.yml
+  when: inventory_hostname in ms_nodes
+
+- include_tasks: mp.yml
+  when: inventory_hostname in mp_nodes
+
+- include_tasks: r.yml
+  when: inventory_hostname in r_nodes
+
+- include_tasks: qpid.yml
+  when: inventory_hostname in groups['qpid']
+
+- include_tasks: pg.yml
+  when: inventory_hostname in groups['pg']
+
+- include_tasks: ui.yml
+  when: inventory_hostname in groups['ui']

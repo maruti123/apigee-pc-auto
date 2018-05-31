@@ -1,0 +1,93 @@
+---
+- name: Set tasks facts
+  set_fact:
+    scan_path: "{{ playbook_dir }}/reports/{{ planet }}/scan"
+    zk_hosts: "{{ groups['zk'] if groups['zk']|length > 0 else groups['ds'] }}"
+    cs_hosts: "{{ groups['c'] if groups['c']|length > 0 else groups['ds'] }}"
+
+- name: Creates scan dir if it doesn't exist
+  file:
+    path: "{{ scan_path }}"
+    state: directory    
+
+- name: Validations | Memory usage
+  include_tasks: memory.yml    
+
+- name: Set memory facts
+  set_fact: 
+    planet_mem: "{{ hostvars['localhost']['memory_res']['results'] }}"
+    
+- name: Validations | Zookeeper
+  include_tasks: zk.yml
+
+- name: Set ZK facts
+  set_fact: 
+    zk_ruoks: "{{ hostvars['localhost']['zk_ruok_res']['results'] }}"
+    zk_stats: "{{ hostvars['localhost']['zk_stat_res']['results'] }}"
+    zk_tree: "{{ hostvars['localhost']['zk_tree_res']['stdout_lines'] }}"
+    
+- name: Validations | Cassandra
+  include_tasks: cassandra.yml
+
+- name: Set CS facts
+  set_fact: 
+    cs_statusthrift: "{{ hostvars['localhost']['cs_statusthrift_res']['results'] }}"
+    cs_ring: "{{ hostvars['localhost']['cs_ring_res']['stdout_lines'] }}"
+    cs_status: "{{ hostvars['localhost']['cs_status_res']['stdout_lines'] }}"
+
+- name: Validations | Postgresql
+  include_tasks: pg.yml
+
+- name: Set PG facts
+  set_fact: 
+    pg_check: "{{ hostvars['localhost']['pg_check_res']['results'] }}"
+
+- name: Validations | Pods
+  include_tasks: pods.yml
+  
+- name: Set Pods facts
+  set_fact: 
+    pod_servers: "{{ hostvars['localhost']['pod_servers_res']['results'] }}"  
+
+- name: Validations | self
+  include_tasks: self.yml
+
+- name: Set self facts
+  set_fact: 
+    self_status: "{{ hostvars['localhost']['self_res']['results'] + hostvars['localhost']['self_rmp_res']['results'] }}"
+
+- name: Validations | AX groups
+  include_tasks: ax.yml
+
+- name: Set ax facts
+  set_fact: 
+    ax_status: "{{ hostvars['localhost']['ax_groups_res'] }}"
+
+- name: Create scan files
+  template:
+    src: "{{ item }}"
+    dest: "{{ scan_path }}/{{ item.split('.')[:-1]|join('.') }}"
+  with_items:
+    - planet_memory.txt.j2
+    - zk_health.csv.j2
+    - zk_tree.txt.j2
+    - cs_ring.txt.j2
+    - cs_status.txt.j2
+    - cs_statusthrift.csv.j2
+    - pg_check.csv.j2
+    - ax_groups.json.j2
+
+- name: Create Pod files
+  template:
+    src: pod.json.j2
+    dest: "{{ scan_path }}/pod_{{ item['item'][1]~'_'~item['item'][0] }}.json"
+  with_items:
+    - "{{ pod_servers }}"
+
+- name: Create self files
+  template:
+    src: self.json.j2
+    dest: "{{ scan_path }}/self_{{ item['item'][1]~'_'~item['item'][0] }}.json"
+  when: item['skipped'] is not defined
+  with_items:
+    - "{{ self_status }}"

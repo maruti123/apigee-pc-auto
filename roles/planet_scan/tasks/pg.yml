@@ -1,0 +1,10 @@
+---
+- name: Postgres check
+  shell: |
+    PG=`/opt/apigee/apigee-service/bin/apigee-service apigee-postgresql postgres-check-{{ hostvars[item]['pg_conf'] }}|awk 'END{print}'`;
+    echo {{ hostvars[item]['ansible_host'] }},{{ item }},$PG;
+  delegate_to: "{{ item }}"
+  register: pg_check_res
+  when: hostvars[item]['pg_conf'] is defined
+  with_items: 
+      - "{{ groups['pg'] }}"

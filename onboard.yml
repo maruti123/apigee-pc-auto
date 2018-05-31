@@ -1,0 +1,4 @@
+---
+- hosts: ms:msldap[0]
+  roles:
+    - onboard

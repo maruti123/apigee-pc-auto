@@ -1,0 +1,13 @@
+---
+- name: Ax groups
+  delegate_to: "{{ (groups['ms'] | union(groups['msldap']))[0] }}"
+  uri:
+    url:  http://localhost:8080/v1/analytics/groups/ax
+    user: "{{ opdk_admin_email }}"
+    password: "{{ opdk_admin_password }}"
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json"
+    status_code: 200
+    return_content: yes
+  register: ax_groups_res  

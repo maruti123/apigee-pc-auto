@@ -1,0 +1,6 @@
+---
+- include_tasks: users.yml
+  when: api_action == "users"
+
+- include_tasks: roles.yml
+  when: api_action == "roles"

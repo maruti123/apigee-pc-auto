@@ -1,0 +1,8 @@
+---
+- name: Memory
+  delegate_to: "{{ item.0 }}"
+  command: "{{ item.1 }}"
+  register: memory_res
+  with_nested:
+  - "{{ groups['planet'] }}"
+  - ["df", "free"]

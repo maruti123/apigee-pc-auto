@@ -1,0 +1,16 @@
+---
+- name: Central pod
+  delegate_to: "{{ item.0 }}"
+  uri:
+    url:  http://localhost:8080/v1/servers?pod={{ "gateway-"~hostvars[item.0]['region'][-1] if item.1 == "gateway" else item.1 }}&region={{ hostvars[item.0]['region'] }}
+    user: "{{ opdk_admin_email }}"
+    password: "{{ opdk_admin_password }}"
+    force_basic_auth: yes
+    headers:
+      Content-Type: "application/json"
+    status_code: 200
+    return_content: yes
+  register: pod_servers_res
+  with_nested:
+    - "{{ groups['ms'] | union(groups['msldap']) }}"
+    - ["central", "gateway", "analytics" ]

@@ -1,0 +1,4 @@
+---
+- hosts: ms:msldap
+  roles:
+    - vhost_tls 

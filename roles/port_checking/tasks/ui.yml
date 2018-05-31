@@ -1,0 +1,25 @@
+---
+# tasks file for port-connectivity-validator
+- name: Include ui groups and ports
+  include_vars:
+    file: ui.yml
+
+# REGIONAL
+- name: UI -> MS port connectivity status  
+  shell: |
+    PASS=`nmap -Pn {{ hostvars[item.0].ansible_host }} -p {{  item.1 }}|awk -F'/' '/filtered/ {print $1}'`;
+    if [ ${PASS} -eq {{ item.1 }} ]; then 
+      RESULT="false"
+    else
+      RESULT="true"
+    fi
+    echo "{{ ansible_host }},{{ hostvars[item.0].ansible_host }},{{ item.0 }},{{ item.1 }},$RESULT" 
+  register: ui_ms_port_status
+  ignore_errors: yes
+  with_nested:
+    - "{{ groups[node_region ~ '-msldap'] + groups[node_region ~ '-ms']}}"
+    - "{{ ui_groups['ms'] }}"
+
+- name: Set Fact MS port
+  set_fact:  
+    ui_ms_port: '{{ ui_ms_port_status.results }}'

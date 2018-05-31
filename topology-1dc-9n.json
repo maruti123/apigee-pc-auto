@@ -1,0 +1,181 @@
+{
+  "planet": "PCOD-Prod-1DC-9N",
+  "regions": [
+    {
+      "id": 1,
+      "name": "dc-1",
+      "subnets": [
+        {
+          "name": "management",
+          "tier": "tier2",
+          "nodes": [
+            {
+              "id": 1,
+              "hostname": "DC1MS",
+              "ip": "10.0.0.117",
+              "components": [
+                {
+                  "comp": "UI"
+                },
+                {
+                  "comp": "MS"
+                },
+                {
+                  "comp": "OL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "datastorage",
+          "tier": "datastorage",
+          "nodes": [
+            {
+              "id": 2,
+              "hostname": "DC1DS1",
+              "ip": "10.0.1.131",
+              "components": [
+                {
+                  "comp": "CS"
+                },
+                {
+                  "comp": "ZK"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "hostname": "DC1DS2",
+              "ip": "10.0.1.244",
+              "components": [
+                {
+                  "comp": "CS"
+                },
+                {
+                  "comp": "ZK"
+                }
+              ]
+            },
+            {
+              "id": 4,
+              "hostname": "DC1DS3",
+              "ip": "10.0.1.234",
+              "components": [
+                {
+                  "comp": "CS"
+                },
+                {
+                  "comp": "ZK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "gateway",
+          "tier": "tier2",
+          "nodes": [
+            {
+              "id": 5,
+              "hostname": "DC1RMP1",
+              "ip": "10.0.1.190",
+              "components": [
+                {
+                  "comp": "R"
+                },
+                {
+                  "comp": "MP"
+                }
+              ]
+            },
+            {
+              "id": 6,
+              "hostname": "DC1RMP2",
+              "ip": "10.0.1.84",
+              "components": [
+                {
+                  "comp": "R"
+                },
+                {
+                  "comp": "MP"
+                }
+              ]
+            },
+			{
+              "id": 7,
+              "hostname": "DC1RMP3",
+              "ip": "10.0.1.77",
+              "components": [
+                {
+                  "comp": "R"
+                },
+                {
+                  "comp": "MP"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "analytics",
+          "tier": "datastorage",
+          "nodes": [
+            {
+              "id": 8,
+              "hostname": "DC1AXm",
+              "ip": "10.0.1.170",
+              "components": [
+                {
+                  "comp": "PS"
+                },
+                {
+                  "comp": "QS"
+                },
+                {
+                  "comp": "QD"
+                },
+                {
+                  "comp": "PGm"
+                }
+              ]
+            },
+            {
+              "id": 9,
+              "hostname": "DC1AXs",
+              "ip": "10.0.1.89",
+              "components": [
+                {
+                  "comp": "PS"
+                },
+                {
+                  "comp": "QS"
+                },
+                {
+                  "comp": "QD"
+                },
+                {
+                  "comp": "PGs"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tiers": [
+        {
+          "name": "tier2"
+        },
+        {
+          "name": "datastorage"
+        }
+      ]
+    }
+  ],
+  "ssh": {
+    "bastion": {
+      "present": true
+    },
+    "ssh_password": true
+  }
+}

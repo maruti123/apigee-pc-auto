@@ -1,0 +1,67 @@
+cp_ports:
+  - cs_port    
+  - zk_port
+  - ms_ds_port
+  - ms_r_port
+  - ms_mp_port
+  - ms_pg_port
+  - ms_qpid_port
+  - mp_ds_port
+  - mp_ms_port
+  - mp_mp_port
+  - mp_qpid_port
+  - r_ds_port
+  - r_ms_port
+  - qpid_ds_port
+  - qpid_ms_port
+  - qpid_pg_port
+  - pg_ds_port
+  - pg_ms_port
+  - pg_pg_port
+  - ui_ms_port
+
+port_name_map:
+  _7199: cassandra_jmx_port
+  _9160: cassandra_thrift_client_port
+  _9042: cassandra_cql_native_port
+  _7000: cassandra_non_ssl_gossip_port
+  _7001: cassandra_ssl_gossip_port
+
+  _2181: zk_data_port
+  _2888: zk_leader_port
+  _3888: zk_voter_port
+
+  _4528: mp_int_mgmt_port
+  _8082: mp_ext_mgmt_port
+  _1101: mp_jmx_port
+  _8998: mp_router_port
+
+  _1099: ms_jmx_port
+  _8080: ms_ext_mgmt_port
+
+  _1100: router_jmx_port
+  _8081: router_ext_mgmt_port
+  _4527: router_int_mgmt_port
+
+  _1102: qpid_jmx_port
+  _4529: qpid_int_mgmt_port
+  _5672: qpid_messaging_port
+  _8083: qpid_ext_mgmt_port
+
+  _1103: pg_jmx_port
+  _4530: pg_int_mgmt_port
+  _5432: pg_db_port
+  _8084: pg_ext_mgmt_port
+
+  _9000: ui_http_port
+
+  _9001: edge_proxy_port
+
+  _10389: ldap_data_port
+
+  _8888: php_fpm_port_
+
+  _25826: influxdb_system_port
+  _8086: influxdb_port
+
+  _22: ssh

@@ -1,0 +1,57 @@
+---
+non_service_tasks: 
+  - setup
+  - update
+
+service_map:
+  zk:
+    - apigee-zookeeper
+  c:
+    - apigee-cassandra
+  ds:
+    - apigee-zookeeper
+    - apigee-cassandra    
+  ld:
+    - apigee-openldap
+  ms:
+    - apigee-openldap
+    - edge-management-server
+    - edge-ui    
+  r:
+    - edge-router
+  mp:
+    - edge-message-processor
+  rmp:
+    - edge-router
+    - edge-message-processor
+  qs:
+    - apigee-qpidd
+    - edge-qpid-server
+  ps:
+    - apigee-postgresql
+    - edge-postgres-server
+  sax:
+    - apigee-qpidd
+    - edge-qpid-server
+    - apigee-postgresql
+    - edge-postgres-server
+
+component_map:
+  zk:
+    - zk
+  c:
+    - cs
+  ds:
+    - zk
+    - cs
+  ld:
+    - ldap    
+  qs:
+    - qpid    
+  ps:
+    - ps    
+  sax:
+    - qpid
+    - ps
+  edge:
+    - edge  

@@ -1,0 +1,5 @@
+- name: Set region
+  set_fact: 
+    region: "{{ hostvars[inventory_hostname]['region'] }}"
+- name: Edge provision
+  command: /opt/apigee/apigee-service/bin/apigee-service apigee-provision setup-org -f /tmp/apigee/response_{{ planet }}_{{ region }}_provision.cfg
