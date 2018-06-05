@@ -407,7 +407,3 @@ $ ./service.sh -i inventory/INVENTORY_FILE -g HOST_GROUP -c "echo 'Hello node!'"
 
 \* _/opt/apigee/apigee-service/bin/apigee-all start|restart_ are not recommended since the start order is important: [Starting apigee components](https://docs.apigee.com/private-cloud/latest/starting-stopping-and-restarting-apigee-edge)
 
-## Author <a name="author" />
-
-If you have any questions regarding this project contact:  
-Mauro González <jmajma8@gmail.com>
