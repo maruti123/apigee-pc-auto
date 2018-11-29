@@ -1,4 +1,4 @@
-# Apigee OPDK ansible (Under construction)
+# Apigee OPDK ansible 
 
 Centralize Edge operation tasks using one inventory file as reference for all tasks.
 
