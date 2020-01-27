@@ -127,7 +127,7 @@ Find the files under:
 Generate response file per region used by the installation, upgrade and other ops tasks. Also
 create the onboarding response file:
 ```
-$ ansible-playbook -e -i inventory/INVENTORY_FILE response_files.yml
+$ ansible-playbook -i inventory/INVENTORY_FILE response_files.yml
 ```
 Find the response files under:
   - _reports/PLANET/response_files/response_PLANET_REGION.cfg_
